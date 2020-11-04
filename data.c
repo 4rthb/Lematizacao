@@ -48,3 +48,12 @@ DicLDE* recebeDicionario(char *txt){
     return D;
 }
 
+int ler_arquivo(FILE *arquivo, char *linha){
+
+    if(fscanf(arquivo,"%s",linha))
+    {
+        return linha;
+    }
+    else
+        return NULL;
+}

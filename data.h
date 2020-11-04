@@ -11,4 +11,4 @@ typedef struct dicionariolde{
 DicLDE* inicializa(void);
 DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo);
 DicLDE* recebeDicionario(char *txt);
-
+int ler_arquivo(FILE *arquivo, char *a);
