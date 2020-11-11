@@ -1,15 +1,17 @@
 # depslib dependency file v1.0
-1604360760 source:c:\users\b_art\desktop\ed\lematizacao\data.c
+1605123823 source:c:\users\b_art\desktop\ed\lematizacao\data.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
 	"data.h"
 
-1604360742 c:\users\b_art\desktop\ed\lematizacao\data.h
+1605123878 c:\users\b_art\desktop\ed\lematizacao\data.h
 
-1604340639 source:c:\users\b_art\desktop\ed\lematizacao\main.c
+1605123443 source:c:\users\b_art\desktop\ed\lematizacao\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
 	"data.h"
 
