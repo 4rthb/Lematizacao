@@ -12,7 +12,7 @@ DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo){
     DicLDE *novo, *PtAux;
 
     novo = (DicLDE*) malloc(sizeof(DicLDE));
-    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);
+    fscanf(arquivo,"%s %s", novo->info.lema, novo->info.palavra);
     novo->prox = NULL;
     if ((PtLista) == NULL){
         PtLista = novo;
@@ -95,9 +95,9 @@ DicLDE* recebeDicionario(char *txt){
     return D;
 }
 
-char* ler_arquivo(FILE *arquivo, char linha[30]){
+char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
 
-    fscanf(arquivo,"%s",linha);
+    fscanf(arquivo,"%s%c",linha,tab);
     return linha;
 }
 
@@ -108,7 +108,11 @@ DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha){
         printf("Erro ao procurar no dicionario");
         return NULL;
     }
-    linha[0]=tolower(linha[0]);
+
+    for(int i = 0; i < strlen(linha) ; i++){
+      linha[i] = tolower(linha[i]);
+    }
+
     do{
         check=strcmp(linha,D->info.palavra);
         if(!check){
@@ -123,27 +127,42 @@ DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha){
 }
 
 DicLDE* encontraNoDic(DicLDE *D, char *linha){
-    int check;
+    int check=1;
 
     if(linha==NULL || D->info.palavra==NULL){
         printf("Erro ao procurar no dicionario");
         return NULL;
     }
-    linha[0]=tolower(linha[0]);
-    do{
+
+    for(int i = 0; i < strlen(linha) ; i++){
+      linha[i] = tolower(linha[i]);
+    }
+
+    while(check && D->prox!=NULL){
         check=strcmp(linha,D->info.palavra);
-        if(!check){
-            return D;
-        }
-        else if(check){
+        if(check!=0 && D->prox!=NULL){
             D=D->prox;
         }
-    }while(check && D->prox!=NULL);
+        else if(!check){
+            return D;
+        }
+    }
     return NULL;
 }
 
-void colocaSaida(FILE *saida, DicLDE *pos){
-    fputs(pos->info.lema,saida);
+int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab){
+    if(pos!=NULL){
+        fputs(pos->info.lema,saida);
+        if(tab==' ' || tab=='\n')
+            fputs(&tab,saida);
+        return 1;
+    }
+    else{
+        fputs(palavra,saida);
+        if(tab==' ' || tab=='\n')
+            fputc(tab,saida);
+        return 0;
+    }
 }
 
 

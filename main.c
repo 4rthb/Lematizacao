@@ -9,7 +9,7 @@ int main (int argc, char *argv[])
     FILE *entrada;
     FILE *saida;
     DicLDE *D, *posicao;
-    char palavra[30];
+    char palavra[30], tab;
 
     if (argc!=4)
     {
@@ -25,9 +25,9 @@ int main (int argc, char *argv[])
         }
         saida=fopen(argv[3],"a+");
         while(!feof(entrada)){
-            strcpy(palavra,ler_arquivo(entrada,palavra));
+            strcpy(palavra,ler_arquivo(entrada,palavra,&tab));
             posicao=encontraNoDic(D,palavra);
-            colocaSaida(saida,posicao);
+            colocaSaida(saida,posicao,palavra,tab);
 
         }
         return 0;
