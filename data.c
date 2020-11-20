@@ -12,7 +12,7 @@ DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo){
     DicLDE *novo, *PtAux;
 
     novo = (DicLDE*) malloc(sizeof(DicLDE));
-    fscanf(arquivo,"%s %s", novo->info.lema, novo->info.palavra);
+    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);
     novo->prox = NULL;
     if ((PtLista) == NULL){
         PtLista = novo;
@@ -101,7 +101,7 @@ char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
     return linha;
 }
 
-DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha){
+DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha, int *comp){
     int check;
 
     if(linha==NULL || D->info.palavra==NULL){
@@ -126,27 +126,41 @@ DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha){
     return NULL;
 }
 
-DicLDE* encontraNoDic(DicLDE *D, char *linha){
-    int check=1;
+DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
+    int check=1, c=0;
+    char strip[strlen(linha)];
 
     if(linha==NULL || D->info.palavra==NULL){
         printf("Erro ao procurar no dicionario");
         return NULL;
     }
+    *comp+=1;
 
-    for(int i = 0; i < strlen(linha) ; i++){
+    for(int i = 0 ; i < strlen(linha) ; i++){
       linha[i] = tolower(linha[i]);
+      if (isalnum(linha[i]))
+        {
+            strip[c] = linha[i];
+            c++;
+        }
     }
+    strip[c] = '\0';
+    strcpy(linha,strip);
 
     while(check && D->prox!=NULL){
+        *comp+=1;
         check=strcmp(linha,D->info.palavra);
+        *comp+=1;
         if(check!=0 && D->prox!=NULL){
+            *comp+=1;
             D=D->prox;
         }
         else if(!check){
+            *comp+=1;
             return D;
         }
     }
+    *comp+=1;
     return NULL;
 }
 

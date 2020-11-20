@@ -14,6 +14,6 @@ DicLDE* ordenaLista(DicLDE* D);
 DicLDE* recebeDicionario(char *txt);
 DicLDE* recebeDicionarioOrdenado(char *txt);
 char* ler_arquivo(FILE *arquivo, char a[30], char* tab);
-DicLDE* encontraNoDicOrdenado(DicLDE *D, char linha[30]);
-DicLDE* encontraNoDic(DicLDE *D, char *linha);
+DicLDE* encontraNoDicOrdenado(DicLDE *D, char linha[30], int *comp);
+DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp);
 int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab);

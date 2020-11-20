@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include "data.h"
 
+int comp=0;
+
 int main (int argc, char *argv[])
 {
     FILE *entrada;
@@ -26,10 +28,10 @@ int main (int argc, char *argv[])
         saida=fopen(argv[3],"a+");
         while(!feof(entrada)){
             strcpy(palavra,ler_arquivo(entrada,palavra,&tab));
-            posicao=encontraNoDic(D,palavra);
+            posicao=encontraNoDic(D,palavra,&comp);
             colocaSaida(saida,posicao,palavra,tab);
-
         }
+        printf("Numero de comparacoes: %d\n", comp);
         return 0;
     }
 
