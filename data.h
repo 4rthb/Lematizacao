@@ -8,12 +8,12 @@ typedef struct dicionariolde{
     struct dicionariolde* prox;
 } DicLDE;
 
-DicLDE* inicializa(void);
-DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo);
-DicLDE* ordenaLista(DicLDE* D);
-DicLDE* recebeDicionario(char *txt);
-DicLDE* recebeDicionarioOrdenado(char *txt);
-char* ler_arquivo(FILE *arquivo, char a[30], char* tab);
-DicLDE* encontraNoDicOrdenado(DicLDE *D, char linha[30], int *comp);
-DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp);
-int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab);
+DicLDE* inicializa(void);                                                       //função que inicializa lista
+DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo);                            //função que insere nodo no final da lista
+DicLDE* ordenaLista(DicLDE* D);                                                 //função que ordena lista com base na ordem lexicográfica
+DicLDE* recebeDicionario(char *txt);                                            //função que recebe o dicionário e coloca seus termos na lista
+DicLDE* recebeDicionarioOrdenado(char *txt);                                    //função que recebe o dicionário, o coloca na lista e o ordena
+char* ler_arquivo(FILE *arquivo, char a[30], char* tab);                        //função que lê palavra do arquivo de entrada
+DicLDE* encontraNoDicOrdenado(DicLDE *D, char linha[30], int *comp);            //função que encontra palavra dada no dicionário ordenado
+DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp);                       //função que encontra palavra dada no dicionário
+int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab);             //função que coloca palavra ou lema(se encontrado) no arquivo de saída
