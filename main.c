@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "data.h"
+
+int comp=0;
 
 int main (int argc, char *argv[])
 {
-    FILE * entrada;
-    FILE * saida;
+    FILE *entrada;
+    FILE *saida;
+    DicLDE *D, *posicao;
+    char palavra[30], tab;
 
     if (argc!=4)
     {
@@ -15,9 +20,21 @@ int main (int argc, char *argv[])
     }
     else
     {
-        recebeDicionario(argv[1]);
+        D=recebeDicionario(argv[1]);
+        if((entrada=fopen(argv[2],"r")) == NULL){
+            printf("Não foi possível ler arquivo de entrada");
+            return 2;
+        }
+        saida=fopen(argv[3],"a+");
+        while(!feof(entrada)){
+            strcpy(palavra,ler_arquivo(entrada,palavra,&tab));
+            posicao=encontraNoDic(D,palavra,&comp);
+            colocaSaida(saida,posicao,palavra,tab);
+        }
+        printf("Numero de comparacoes: %d\n", comp);
         return 0;
     }
+
 }
 
 
