@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "data.h"
 
-int comp=0;
+int comp=0;//variï¿½vel global para quantidade de comparaï¿½ï¿½es com a estrutura
 
 int main (int argc, char *argv[])
 {
@@ -13,25 +13,27 @@ int main (int argc, char *argv[])
     DicLDE *D, *posicao;
     char palavra[30], tab;
 
-    if (argc!=4)
+    if (argc!=4)//caso seja passado um nï¿½mero menor/maior de argumentos na linha de comando
     {
         printf ("Numero incorreto de parametros.\n Para chamar o programa digite: ./<programa> <dicionario.txt> <entrada.txt> <saida.txt>");
         return 1;
     }
-    else
+    else//caso seja passado exatos 4 argumentos
     {
-        D=recebeDicionario(argv[1]);
-        if((entrada=fopen(argv[2],"r")) == NULL){
-            printf("Não foi possível ler arquivo de entrada");
+        D=recebeDicionario(argv[1]);//passa argumento 2(nome do dicionario) para funï¿½ï¿½o que o coloca em uma LDE
+        if((entrada=fopen(argv[2],"r")) == NULL){//abre arquivo de entrada(texto a ser lematizado) e checa se ele existe
+            printf("Nao foi possivel ler arquivo de entrada");
             return 2;
         }
-        saida=fopen(argv[3],"a+");
-        while(!feof(entrada)){
-            strcpy(palavra,ler_arquivo(entrada,palavra,&tab));
-            posicao=encontraNoDic(D,palavra,&comp);
-            colocaSaida(saida,posicao,palavra,tab);
+        saida=fopen(argv[3],"a+");//abre arquivo de saada com nome disponibilizado pela linha de comando
+        while(!feof(entrada)){//enquanto nï¿½o chega no final do arquivo de entrada(texto a ser lematizado)
+            strcpy(palavra,ler_arquivo(entrada,palavra,&tab));//chama funï¿½ï¿½o que lï¿½ palavra do arquivo e a copia para variï¿½vel local
+            posicao=encontraNoDic(D,palavra,&comp);                                     //chama funï¿½ï¿½o que procura posiï¿½ï¿½o da palavra na lista(se existir) e a devolve
+            colocaSaida(saida,posicao,palavra,tab);                                     //chama funï¿½ï¿½o que coloca lema(se achado) no arquivo de saï¿½da
         }
-        printf("Numero de comparacoes: %d\n", comp);
+        fclose(entrada);                                                                //fecha arquivos abertos
+        fclose(saida);
+        printf("Numero de comparacoes: %d\n", comp);                                    //imprime numero de comparaï¿½ï¿½es com a estrutura feitos no cï¿½digo
         return 0;
     }
 
