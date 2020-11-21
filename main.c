@@ -31,8 +31,8 @@ int main (int argc, char *argv[])
             posicao=encontraNoDic(D,palavra,&comp);                                     //chama função que procura posição da palavra na lista(se existir) e a devolve
             colocaSaida(saida,posicao,palavra,tab);                                     //chama função que coloca lema(se achado) no arquivo de saída
         }
-        fclose(argv[2]);                                                                //fecha arquivos abertos
-        fclose(argv[3]);
+        fclose(entrada);                                                                //fecha arquivos abertos
+        fclose(saida);
         printf("Numero de comparacoes: %d\n", comp);                                    //imprime numero de comparações com a estrutura feitos no código
         return 0;
     }
