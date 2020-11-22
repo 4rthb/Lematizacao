@@ -33,7 +33,7 @@ DicAVL* rotacao_dupla_direita(DicAVL* p);
 DicAVL* rotacao_dupla_esquerda(DicAVL* p);
 DicAVL* Caso1(DicAVL *a, int *ok);
 DicAVL* Caso2 (DicAVL *a , int *ok);
-DicAVL* insereAVL(DicAVL *a, Dic info, int *ok)
+DicAVL* insereAVL(DicAVL *a, Dic info, int *ok);
 DicAVL* recebeDicionarioAVL(char *txt);
 DicAVL* encontraNoDicAVL(DicAVL *D, char *linha, int *comp);
 int colocaSaidaAVL(FILE *saida, DicAVL *pos, char *palavra, char tab);

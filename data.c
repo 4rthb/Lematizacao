@@ -344,7 +344,7 @@ DicAVL* encontraNoDicAVL(DicAVL *D, char *linha, int *comp){
         printf("Erro ao procurar no dicionario");//retorna erro se uma delas estiver
         return NULL;
     }
-    *comp++;
+    *comp+=1;
 
     for(int i = 0 ; i < strlen(linha) ; i++){//percorre string, fazendo lowercase de todas as letras e removendo caracteres nao-alfabeticos
       linha[i] = tolower(linha[i]);
@@ -360,29 +360,29 @@ DicAVL* encontraNoDicAVL(DicAVL *D, char *linha, int *comp){
 //Pesquisa na AVL
     while(check && (D->esq||D->dir))//enquanto nao for achada a palavra na AVL ou não chegar ao fim da arvore
     {
-        *comp++;
+        *comp+=1;
         check=strcmp(linha,D->info.palavra);//compara palavra recebida e palavra da arvore
-        *comp++;
+        *comp+=1;
         if(!check)//se as palavras forem iguais
         {
-            *comp++;
+            *comp+=1;
             return D;//retorna a posicao da palavra na AVL
         }
         else
         {
             if(check<0)//Caso a palavra seja menor desloca para o ramo esquerdo
             {
-                *comp++;
+                *comp+=1;
                 D=D->esq;
             }
             else//Caso a palavra seja maior 
             {
-                *comp++;
+                *comp+=1;
                 D=D->dir;
             }
         }
     }
-    *comp++;
+    *comp+=1;
     return NULL;//retorna nulo caso nao tenha encontrado palavra na AVL
 }
 
