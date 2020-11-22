@@ -8,41 +8,102 @@ DicLDE* inicializa(void){                                                       
     return NULL;
 }
 
-DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo){
-    DicLDE *novo, *PtAux;
+DicLDE* insereCresc(DicLDE* ptLista, DicLDE* novo, int* comp){
+    DicLDE *ptAux=ptLista;
 
-    novo = (DicLDE*) malloc(sizeof(DicLDE));                                            //aloca espaço na memória para novo nodo
-    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);                       //le a palavra e lema do arquivo de lemas e os colocam no mesmo nodo
-    novo->prox = NULL;
-    if ((PtLista) == NULL){                                                             //caso lista inicialmente vazia, seta anterior NULL
-        PtLista = novo;
-        novo->ant = NULL;
+    if(ptAux==NULL){                                                                    //Se a lista estiver vazia, coloca termo como inicial
+        *comp+=1;                                                                       //aumenta numero de comparacoes
+        novo->ant=NULL;
+        novo->prox=NULL;
+        ptLista=novo;
     }
-    else {                                                                              //caso lista com termos, percorre até chegar no final e depois coloca nodo
-        PtAux = PtLista;
-        while (PtAux->prox != NULL){
-            PtAux=PtAux->prox;
+    else{
+        *comp+=1;                                                                       //aumenta numero de comparacoes
+        while(ptAux->prox!=NULL && strcmp(ptAux->info.palavra,novo->info.palavra)<=0){  //enquanto nÃ£o chega no fim e nÃ£o encontrar palavra "maior", percorre dicionario
+            *comp+=2;                                                                   //aumenta numero de comparacoes
+            ptAux=ptAux->prox;
         }
-        PtAux->prox = novo;
-        novo->ant = PtAux;
+        *comp+=2;                                                                       //aumenta numero de comparacoes
+        if(ptAux->prox==NULL){                                                          //se chegar no final da lista
+            *comp+=1;                                                                   //aumenta numero de comparacoes
+            if(ptAux->ant==NULL){                                                       //se o ultimo termo tambem for o inicial(lista com um termo)
+                *comp+=1;                                                               //aumenta numero de comparacoes
+                if(strcmp(ptAux->info.palavra,novo->info.palavra)>0){                   //quando o termo Ã© maior
+                    *comp+=1;                                                           //aumenta numero de comparacoes
+                    ptAux->ant=novo;
+                    novo->ant=NULL;
+                    novo->prox=ptAux;
+                    ptLista=novo;
+                }
+                else{                                                                   //quando o termo Ã© menor
+                    *comp+=1;                                                           //aumenta numero de comparacoes
+                    ptAux->prox=novo;
+                    novo->prox=NULL;
+                    novo->ant=ptAux;
+                }
+            }
+            else{                                                                       //caso o termo final tenha uma anterior
+                *comp+=1;                                                               //aumenta numero de comparacoes
+                if(strcmp(ptAux->info.palavra,novo->info.palavra)>0){                   //caso o termo final seja maior
+                    *comp+=1;                                                           //aumenta numero de comparacoes
+                    novo->ant=ptAux->ant;
+                    novo->prox=ptAux;
+                    ptAux->ant=novo;
+                    novo->ant->prox=novo;
+                }
+                else{                                                                   //caso o termo final seja menor
+                    *comp+=1;                                                           //aumenta numero de comparacoes
+                    ptAux->prox=novo;
+                    novo->ant=ptAux;
+                    novo->prox=NULL;
+                }
+            }
+        }
+        else{                                                                           //caso tenha parado por que achou um termo maior
+            *comp+=1;                                                                   //aumenta numero de comparacoes
+            if(ptAux->ant==NULL){                                                       //este termo Ã© o primeiro da lista
+                *comp+=1;                                                               //aumenta numero de comparacoes
+                ptAux->ant=novo;
+                novo->prox=ptAux;
+                novo->ant=NULL;
+                ptLista=novo;
+            }
+            else{                                                                       //este termo nÃ£o Ã© o primeiro da lista
+                *comp+=1;                                                               //aumenta numero de comparacoes
+                novo->ant=ptAux->ant;
+                novo->prox=ptAux;
+                novo->ant->prox=novo;
+                ptAux->ant=novo;
+            }
+        }
     }
+    return ptLista;
+}
+
+DicLDE* insereOrdenado(DicLDE *PtLista, FILE* arquivo, int* comp){
+    DicLDE *novo;
+
+    novo = (DicLDE*) malloc(sizeof(DicLDE));                                            //aloca espaï¿½o na memï¿½ria para novo nodo
+    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);                       //le a palavra e lema do arquivo de lemas e os colocam no mesmo nodo
+    PtLista=insereCresc(PtLista,novo,comp);
+
     return PtLista;                                                                     //retorna lista modificada
 }
 
-DicLDE* recebeDicionario(char *txt){
+DicLDE* recebeDicionarioOrdenado(char *txt, int *comp){
     DicLDE *D;
 
     FILE * arquivo;
 
-    D=inicializa();                                                                     //chama função que inicializa LDE
+    D=inicializa();                                                                     //chama funï¿½ï¿½o que inicializa LDE
     arquivo = fopen(txt,"r");                                                           //abre arquivo de lemas
-    if(!arquivo){                                                                       //se nã encontrar arquivo retorna erro
+    if(!arquivo){                                                                       //se nï¿½ encontrar arquivo retorna erro
         printf("Erro abrindo o arquivo!");
         return NULL;
     }
-    else{                                                                               //enquanto não chega no final do arquivo de lemas, coloca nodos na LDE com as informações do arquivo
+    else{                                                                               //enquanto nï¿½o chega no final do arquivo de lemas, coloca nodos na LDE com as informaï¿½ï¿½es do arquivo
         while(!feof(arquivo)){
-            D=insereFinal(D,arquivo);
+            D=insereOrdenado(D,arquivo,comp);
         }
     }
     fclose(arquivo);                                                                    //fecha arquivo de lemas
@@ -51,11 +112,11 @@ DicLDE* recebeDicionario(char *txt){
 
 char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
 
-    fscanf(arquivo,"%s%c",linha,tab);                                                   //lê palavra e caractere seguinte de tabulação
+    fscanf(arquivo,"%s%c",linha,tab);                                                   //lï¿½ palavra e caractere seguinte de tabulaï¿½ï¿½o
     return linha;                                                                       //retorna palavra lida
 }
 
-DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
+DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha, int *comp){
     int check=1, c=0;
     char strip[strlen(linha)];
 
@@ -63,48 +124,39 @@ DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
         printf("Erro ao procurar no dicionario");                                       //retorna erro se uma delas estiver
         return NULL;
     }
-    *comp+=1;                                                                           //aumenta uma comparacao na variavel
-
-    for(int i = 0 ; i < strlen(linha) ; i++){                                           //percorre string, fazendo lowercase de todas as letras e removendo caracteres não-alfabeticos
+    *comp+=1;                                                                           //aumenta numero de comparacoes
+    for(int i = 0 ; i < strlen(linha) ; i++){                                           //percorre string, fazendo lowercase de todas as letras e removendo caracteres nï¿½o-alfabeticos
       linha[i] = tolower(linha[i]);
       if (isalnum(linha[i]))
         {
             strip[c] = linha[i];
             c++;
         }
-    }                                                                                   //definindo novo final da string(o numero de letras na string será sempre menor ou igual que o da string original,
-    strip[c] = '\0';                                                                    //então é preciso colocar um novo final na que removemos os caracteres não-alfabeticos)
+    }                                                                                   //definindo novo final da string(o numero de letras na string serï¿½ sempre menor ou igual que o da string original,
+    strip[c] = '\0';                                                                    //entï¿½o ï¿½ preciso colocar um novo final na que removemos os caracteres nï¿½o-alfabeticos)
     strcpy(linha,strip);                                                                //copia nova string para original
 
-    while(check && D->prox!=NULL){                                                      //enquanto não for achada a palavra na LDE ou não chegarmos no fim da lista
-        *comp+=1;                                                                       //aumenta numero de comparacoes
-        check=strcmp(linha,D->info.palavra);                                            //compara palavra recebida e palavra da lista
-        *comp+=1;                                                                       //aumenta numero de comparacoes
-        if(check!=0 && D->prox!=NULL){                                                  //se as palavras forem diferentes e o proximo termo não for nulo
-            *comp+=1;                                                                   //aumenta numero de comparacoes
-            D=D->prox;                                                                  //percorre lista
-        }
-        else if(!check){                                                                //se as palavras forem iguais
-            *comp+=1;                                                                   //aumenta numero de comparacoes e retorna a posicao da palavra na LDE
+    while(check>=0 && D!=NULL){                                                         //percorre dicionario enquanto nÃ£o chega no fim e palavras nÃ£o sÃ£o maiores do que a recebida
+        check=strcmp(linha,D->info.palavra);                                            //retorna 0 quando encontra palavra igual, ou diferente dependendo de qual string Ã© "maior"
+        *comp+=2;                                                                       //aumenta numero de comparacoes
+        if(!check){                                                                     //quando encontra a palavra no dicionario, retorna posicao dela no dicionario
             return D;
         }
-        else
-            *comp+=1;                                                                   //aumenta numero de comparacoes
+        D=D->prox;
     }
-    *comp+=1;                                                                           //aumenta numero de comparacoes
-    return NULL;                                                                        //retorna nulo caso não tenha encontrado palavra na LDE
+    return NULL;                                                                        //retorna NULL quando nÃ£o encontra no dicionario
 }
 
 int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab){
     if(pos!=NULL){                                                                      //checa se existe a posicao da palavra na string
         fputs(pos->info.lema,saida);                                                    //coloca lema no arquivo de saida
-        if(tab==' ' || tab=='\n')                                                       //coloca char de tabulação caso seja válido
+        if(tab==' ' || tab=='\n')                                                       //coloca char de tabulaï¿½ï¿½o caso seja vï¿½lido
             fputs(&tab,saida);
         return 1;
     }
-    else{                                                                               //caso não exista posição da palavra na lista
-        fputs(palavra,saida);                                                           //coloca a própria palavra no arquivo de saida
-        if(tab==' ' || tab=='\n')                                                       //coloca char de tabulação caso seja válido
+    else{                                                                               //caso nï¿½o exista posiï¿½ï¿½o da palavra na lista
+        fputs(palavra,saida);                                                           //coloca a prï¿½pria palavra no arquivo de saida
+        if(tab==' ' || tab=='\n')                                                       //coloca char de tabulaï¿½ï¿½o caso seja vï¿½lido
             fputc(tab,saida);
         return 0;
     }
