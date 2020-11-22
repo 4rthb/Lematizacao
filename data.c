@@ -199,11 +199,13 @@ DicAVL* encontraNoDicAVL(DicAVL *D, char *linha, int *comp){
             if(check<0)                                             //Caso a palavra seja menor desloca para o ramo esquerdo
             {
                 *comp+=1;
+                if(D->esq==NULL) return NULL;
                 D=D->esq;
             }
             else                                                    //Caso a palavra seja maior 
             {
                 *comp+=1;
+                if(D->dir==NULL) return NULL;
                 D=D->dir;
             }
         }
