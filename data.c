@@ -4,21 +4,21 @@
 #include <ctype.h>
 #include "data.h"
 
-DicLDE* inicializa(void){                                                           //inicializa lista duplamente encadeada
+DicLDE* inicializa(void){                                                               //inicializa lista duplamente encadeada
     return NULL;
 }
 
 DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo){
     DicLDE *novo, *PtAux;
 
-    novo = (DicLDE*) malloc(sizeof(DicLDE));                                        //aloca espaço na memória para novo nodo
-    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);                   //le a palavra e lema do arquivo de lemas e os colocam no mesmo nodo
+    novo = (DicLDE*) malloc(sizeof(DicLDE));                                            //aloca espaço na memória para novo nodo
+    fscanf(arquivo,"%s %s", novo->info.palavra, novo->info.lema);                       //le a palavra e lema do arquivo de lemas e os colocam no mesmo nodo
     novo->prox = NULL;
-    if ((PtLista) == NULL){                                                         //caso lista inicialmente vazia, seta anterior NULL
+    if ((PtLista) == NULL){                                                             //caso lista inicialmente vazia, seta anterior NULL
         PtLista = novo;
         novo->ant = NULL;
     }
-    else {                                                                          //caso lista com termos, percorre até chegar no final e depois coloca nodo
+    else {                                                                              //caso lista com termos, percorre até chegar no final e depois coloca nodo
         PtAux = PtLista;
         while (PtAux->prox != NULL){
             PtAux=PtAux->prox;
@@ -26,53 +26,7 @@ DicLDE* insereFinal(DicLDE *PtLista, FILE* arquivo){
         PtAux->prox = novo;
         novo->ant = PtAux;
     }
-    return PtLista;                                                                 //retorna lista modificada
-}
-
-DicLDE* ordenaLista(DicLDE* D){                     //ERRADO: devemos separar em 3 casos: aux->prox->prox==NULL e aux->ant==NULL
-    DicLDE *Aux;
-    int flag=1, check;
-
-    Aux=D;
-    while(flag){
-        flag=0;
-        while(Aux->prox!=NULL){
-            check=strcmp(Aux->info.palavra,Aux->prox->info.palavra);
-            if(check>0){
-                flag=1;
-                Aux->prox->ant=Aux->ant;
-                Aux->ant->prox=Aux->prox;
-                Aux->prox->prox->ant=Aux;
-                Aux->prox=Aux->prox->prox;
-                Aux->ant->prox->prox=Aux;
-                Aux->ant=Aux->ant->prox;
-            }
-            Aux=Aux->prox;
-        Aux=D;
-        }
-    }
-    return D;
-}
-
-DicLDE* recebeDicionarioOrdenado(char *txt){                    //ERRADO: sei lá kkkk
-    DicLDE *D;
-
-    FILE * arquivo;
-
-    D=inicializa();
-    arquivo = fopen(txt,"r");
-    if(!arquivo){
-        printf("Erro abrindo o arquivo!");
-        return NULL;
-    }
-    else{
-        while(!feof(arquivo)){
-            D=insereFinal(D,arquivo);
-        }
-    }
-    fclose(arquivo);
-    D=ordenaLista(D);
-    return D;
+    return PtLista;                                                                     //retorna lista modificada
 }
 
 DicLDE* recebeDicionario(char *txt){
@@ -80,50 +34,25 @@ DicLDE* recebeDicionario(char *txt){
 
     FILE * arquivo;
 
-    D=inicializa();                                                                 //chama função que inicializa LDE
-    arquivo = fopen(txt,"r");                                                       //abre arquivo de lemas
-    if(!arquivo){                                                                   //se nã encontrar arquivo retorna erro
+    D=inicializa();                                                                     //chama função que inicializa LDE
+    arquivo = fopen(txt,"r");                                                           //abre arquivo de lemas
+    if(!arquivo){                                                                       //se nã encontrar arquivo retorna erro
         printf("Erro abrindo o arquivo!");
         return NULL;
     }
-    else{                                                                           //enquanto não chega no final do arquivo de lemas, coloca nodos na LDE com as informações do arquivo
+    else{                                                                               //enquanto não chega no final do arquivo de lemas, coloca nodos na LDE com as informações do arquivo
         while(!feof(arquivo)){
             D=insereFinal(D,arquivo);
         }
     }
-    fclose(arquivo);                                                                //fecha arquivo de lemas
-    return D;                                                                       //retorna lista criada
+    fclose(arquivo);                                                                    //fecha arquivo de lemas
+    return D;                                                                           //retorna lista criada
 }
 
-char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){        //ARRUMAR: da pra pegar dois caracteres pra ler 2 tabulações seguintes, caso for letra da rewind no ponteiro do arquivo
+char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
 
-    fscanf(arquivo,"%s%c",linha,tab);                                               //lê palavra e caractere seguinte de tabulação
-    return linha;                                                                   //retorna palavra lida
-}
-
-DicLDE* encontraNoDicOrdenado(DicLDE *D, char *linha, int *comp){   //ERRADO: tirar caracteres não-alfabeticos, arrumar while
-    int check;
-
-    if(linha==NULL || D->info.palavra==NULL){
-        printf("Erro ao procurar no dicionario");
-        return NULL;
-    }
-
-    for(int i = 0; i < strlen(linha) ; i++){
-      linha[i] = tolower(linha[i]);
-    }
-
-    do{
-        check=strcmp(linha,D->info.palavra);
-        if(!check){
-            return D;
-        }
-        else if(check<0){
-            D=D->prox;
-        }
-        else return NULL;
-    }while(check && D->prox!=NULL);
-    return NULL;
+    fscanf(arquivo,"%s%c",linha,tab);                                                   //lê palavra e caractere seguinte de tabulação
+    return linha;                                                                       //retorna palavra lida
 }
 
 DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
@@ -147,7 +76,7 @@ DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
     strip[c] = '\0';                                                                    //então é preciso colocar um novo final na que removemos os caracteres não-alfabeticos)
     strcpy(linha,strip);                                                                //copia nova string para original
 
-    while(check && D->prox!=NULL){//ARRUMAR:talvez? n sei se ta pegando ultima palavra  //enquanto não for achada a palavra na LDE ou não chegarmos no fim da lista
+    while(check && D->prox!=NULL){                                                      //enquanto não for achada a palavra na LDE ou não chegarmos no fim da lista
         *comp+=1;                                                                       //aumenta numero de comparacoes
         check=strcmp(linha,D->info.palavra);                                            //compara palavra recebida e palavra da lista
         *comp+=1;                                                                       //aumenta numero de comparacoes
@@ -166,7 +95,7 @@ DicLDE* encontraNoDic(DicLDE *D, char *linha, int *comp){
     return NULL;                                                                        //retorna nulo caso não tenha encontrado palavra na LDE
 }
 
-int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab){//ARRUMAR: colocar dois char de tabulacao se existirem
+int colocaSaida(FILE *saida, DicLDE *pos, char *palavra, char tab){
     if(pos!=NULL){                                                                      //checa se existe a posicao da palavra na string
         fputs(pos->info.lema,saida);                                                    //coloca lema no arquivo de saida
         if(tab==' ' || tab=='\n')                                                       //coloca char de tabulação caso seja válido
