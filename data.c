@@ -187,7 +187,7 @@ DicAVL* encontraNoDicAVL(DicAVL *D, char *linha, int *comp){
     while(check && (D->esq||D->dir))                                //enquanto nao for achada a palavra na AVL ou não chegar ao fim da arvore
     {
         *comp+=1;
-        check = strcmp(linha,D->info.palavra);                        //compara palavra recebida e palavra da arvore
+        check = strcmp(linha,D->info.palavra);                      //compara palavra recebida e palavra da arvore
         *comp+=1;
         if(!check)                                                  //se as palavras forem iguais
         {
