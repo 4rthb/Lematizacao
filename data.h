@@ -1,5 +1,5 @@
 typedef struct dicionario{
-    char palavra[30], lema[30];
+    char palavra[50], lema[50];
 }Dic;
 
 typedef struct dicionarioavl{

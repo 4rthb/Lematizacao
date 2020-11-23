@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     FILE *entrada;
     FILE *saida;
     DicAVL *D, *posicao;
-    char palavra[30], tab;
+    char palavra[50], tab;
     if (argc!=4)//caso seja passado um n�mero menor/maior de argumentos na linha de comando
         {
             printf ("Numero incorreto de parametros.\n Para chamar o programa digite: ./<programa> <dicionario.txt> <entrada.txt> <saida.txt>");
