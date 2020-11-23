@@ -49,7 +49,7 @@ DicLDE* recebeDicionario(char *txt){
     return D;                                                                           //retorna lista criada
 }
 
-char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
+char* ler_arquivo(FILE *arquivo, char linha[50], char* tab){
 
     fscanf(arquivo,"%s%c",linha,tab);                                                   //lê palavra e caractere seguinte de tabulação
     return linha;                                                                       //retorna palavra lida

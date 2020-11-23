@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
     FILE *entrada;
     FILE *saida;
     DicLDE *D, *posicao;
-    char palavra[30], tab;
+    char palavra[50], tab;
 
     if (argc!=4)                                                                        //caso seja passado um número menor/maior de argumentos na linha de comando
     {
