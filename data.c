@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "data.h"
 
-char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
+char* ler_arquivo(FILE *arquivo, char linha[50], char* tab){
 
     fscanf(arquivo,"%s%c",linha,tab);//le palavra e caractere seguinte de tabulacao
     return linha;//retorna palavra lida
