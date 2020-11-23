@@ -110,7 +110,7 @@ DicLDE* recebeDicionarioOrdenado(char *txt, int *comp){
     return D;                                                                           //retorna lista criada
 }
 
-char* ler_arquivo(FILE *arquivo, char linha[30], char* tab){
+char* ler_arquivo(FILE *arquivo, char linha[50], char* tab){
 
     fscanf(arquivo,"%s%c",linha,tab);                                                   //l� palavra e caractere seguinte de tabula��o
     return linha;                                                                       //retorna palavra lida
